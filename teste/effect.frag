@@ -1,42 +1,31 @@
-precision lowp float;
+precision mediump float;
+
+#define PI 3.14159265359
+#define TWO_PI 6.28318530718
 
 // grab texcoords from vert shader
 varying vec2 vTexCoord;
 
 // our textures coming from p5
 uniform sampler2D tex0;
-uniform vec2 resolution;
+uniform sampler2D tex1;
+uniform sampler2D tex2;
 
-
-float amt = 0.1; // the amount of displacement, higher is more
-float squares = 20.0; // the number of squares to render vertically
 
 void main() {
-  float aspect = resolution.x / resolution.y;
-  float offset = amt * 0.5;
 
   vec2 uv = vTexCoord;
-
   // the texture is loaded upside down and backwards by default so lets flip it
   uv.y = 1.0 - uv.y;
 
-  // copy of the texture coords
-  vec2 tc = uv;
+  // get the three webcam feeds
+  vec4 cam = texture2D(tex0, uv);
+  vec4 cam2 = texture2D(tex1, uv);
+  vec4 cam3 = texture2D(tex2, uv);
 
-  // move into a range of -0.5 - 0.5
-  uv -= 0.5;
-
-  // correct for window aspect to make squares
-  uv.x *= aspect;
-
-  // tile will be used to offset the texture coordinates
-  // taking the fract will give us repeating patterns
-  vec2 tile = fract(uv * squares + 0.5) * amt;
-
-  // sample the texture using our computed tile
-  // offset will remove some texcoord edge artifacting
-  vec4 tex = texture2D(tex0, tc + tile - offset);
+  // lets use one channel from each of the textures
+  vec4 colOut = vec4(cam.r, cam2.g, cam3.b, 1.0);
 
   // render the output
-  gl_FragColor = tex;
+  gl_FragColor = colOut;
 }

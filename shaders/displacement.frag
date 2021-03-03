@@ -1,26 +1,37 @@
-#ifdef GL_ES
 precision mediump float;
-#endif
 
-// variáveis a receber do sketch
-uniform vec2 u_resolution;
-uniform float u_time;
-uniform vec2 u_mouse;
+// lets grab texcoords just for fun
+varying vec2 vTexCoord;
 
-// receber variável do arquivo .vert
-// varying vec2 vTexCoord;
+// our texture and image coming from p5
+uniform sampler2D tex0;
+uniform sampler2D tex1;
 
-// ainda não entendi, mas pelo visto tem que ter uma cópia local da variável
-// vec2 st = vTexCoord;
+// how much to displace by (controlled by mouse)
+uniform float amt;
 
 void main() {
 
-  vec2 st = gl_FragCoord.xy/u_resolution.xy;
+  vec2 uv = vTexCoord;
+  // the texture is loaded upside down and backwards by default so lets flip it
+  uv = 1.0 - uv;
 
-  gl_FragColor = vec4(0.5, u_mouse.x, u_mouse.y, 1.0);
+  // get the webcam as a vec4 using texture2D
+  vec4 cam = texture2D(tex0, uv);
 
-}
+  // lets get the average color of the rgb values
+  float avg = dot(cam.rgb, vec3(0.33333));
 
-vec3 rgb(float r, float g, float b){
-  return vec3(r / 255.0, g / 255.0, b / 255.0);
+  // then spread it between -1 and 1
+  avg = avg * 2.0 - 1.0;
+
+  // we will displace the image by the average color times the amt of displacement
+  float disp = avg * amt;
+
+  // displacement works by moving the texture coordinates of one image with the colors of another image
+  // add the displacement to the texture coordinates
+  vec4 pup = texture2D(tex1, uv + disp);
+
+  // output the image
+  gl_FragColor = pup;
 }
