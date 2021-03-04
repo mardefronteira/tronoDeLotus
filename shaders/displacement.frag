@@ -1,4 +1,4 @@
-precision mediump float;
+precision lowp float;
 
 // lets grab texcoords just for fun
 varying vec2 vTexCoord;

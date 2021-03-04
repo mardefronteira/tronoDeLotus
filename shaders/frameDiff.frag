@@ -1,4 +1,4 @@
-precision mediump float;
+precision lowp float;
 
 // grab texcoords from the vertex shader
 varying vec2 vTexCoord;

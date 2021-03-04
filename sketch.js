@@ -10,9 +10,6 @@ let cam;
 let camadaShader;
 let camadaCopia;
 
-// we need one extra createGraphics layer for the previous video frame
-let pastFrame;
-
 // fundo pro displacement
 let imgFundo;
 
@@ -39,7 +36,7 @@ function preload() {
   );
   delay = loadShader("shaders/delay.vert", "shaders/delay.frag");
 
-  shaders = [videoFeedback, frameDiff, mosaic, displacement, delay];
+  shaders = [delay, displacement, videoFeedback, mosaic, frameDiff];
 
   imgFundo = loadImage("fundo.jpg");
 }
@@ -61,9 +58,6 @@ function setup() {
 
   // this layer will just be a copy of what we just did with the shader
   camadaCopia = createGraphics(windowWidth, windowHeight);
-
-  // the pastFrame layer doesn't need to be WEBGL
-  pastFrame = createGraphics(windowWidth, windowHeight);
 
   let anterior = createButton("<<");
   anterior.position(20, 20);
@@ -87,15 +81,15 @@ function setup() {
 let shaderAtiva = 0;
 
 function draw() {
-  switch (shaderAtiva) {
-    case 0:
-      // shader() sets the active shader with our shader
-      camadaShader.shader(shaders[shaderAtiva]);
+  // shader() sets the active shader with our shader
+  camadaShader.shader(shaders[shaderAtiva]);
+  shaders[shaderAtiva] !== delay
+    ? shaders[shaderAtiva].setUniform("tex0", cam)
+    : "";
 
-      // lets just send the cam to our shader as a uniform
-      shaders[shaderAtiva].setUniform("tex0", cam);
-
-      // also send the copy layer to the shader as a uniform
+  switch (shaders[shaderAtiva]) {
+    case videoFeedback:
+      // send the copy layer to the shader as a uniform
       shaders[shaderAtiva].setUniform("tex1", camadaCopia);
 
       // send mouseIsPressed to the shader as a int (either 0 or 1)
@@ -103,22 +97,14 @@ function draw() {
 
       shaders[shaderAtiva].setUniform("time", frameCount * 0.01);
 
-      // rect gives us some geometry on the screen
-      camadaShader.rect(0, 0, width, height);
-
       // draw the camadaShader into the copy layer
       camadaCopia.image(camadaShader, 0, 0, width, height);
 
       break;
-    case 1:
-      // shader() sets the active shader with our shader
-      camadaShader.shader(shaders[shaderAtiva]);
 
-      // lets just send the cam to our shader as a uniform
-      shaders[shaderAtiva].setUniform("tex0", cam);
-
-      // send the pastframe layer to the shader
-      shaders[shaderAtiva].setUniform("tex1", pastFrame);
+    case frameDiff:
+      // enviar frame anterior à camada de cópia
+      shaders[shaderAtiva].setUniform("tex1", camadaCopia);
 
       // also send the mouseX value but convert it to a number between 0 and 1
       shaders[shaderAtiva].setUniform("mouseX", mouseX / width);
@@ -128,51 +114,29 @@ function draw() {
 
       // draw the cam into the createGraphics layer at the very end of the draw loop
       // because this happens at the end, if we use it earlier in the loop it will still be referencing an older frame
-      pastFrame.image(cam, 0, 0, windowWidth, windowHeight);
+      camadaCopia.image(cam, 0, 0, windowWidth, windowHeight);
       break;
 
-    case 2:
-      // shader() sets the active shader with our shader
-      camadaShader.shader(shaders[shaderAtiva]);
-
-      // send the camera and the resolution to the shader
-      shaders[shaderAtiva].setUniform("tex0", cam);
+    case mosaic:
+      // send the resolution to the shader
       shaders[shaderAtiva].setUniform("resolution", [width, height]);
-
-      // rect gives us some geometry on the screen
-      camadaShader.rect(0, 0, width, height);
       break;
 
-    case 3:
-      // shader() sets the active shader with our shader
-      camadaShader.shader(shaders[shaderAtiva]);
-
+    case displacement:
       // lets just send the cam to our shader as a uniform
-      shaders[shaderAtiva].setUniform("tex0", cam);
       shaders[shaderAtiva].setUniform("tex1", imgFundo);
 
       shaders[shaderAtiva].setUniform("amt", map(mouseX, 0, width, 0, 0.2));
-      // rect gives us some geometry on the screen
-      camadaShader.rect(0, 0, width, height);
       break;
 
-    case 4:
+    case delay:
       // draw the camera on the current layer
       layers[index1].image(cam, 0, 0, width, height);
-
-      // shader() sets the active shader with our shader
-      camadaShader.shader(shaders[shaderAtiva]);
 
       // send the camera and the two other past frames into the camera feed
       shaders[shaderAtiva].setUniform("tex0", layers[index1]);
       shaders[shaderAtiva].setUniform("tex1", layers[index2]);
       shaders[shaderAtiva].setUniform("tex2", layers[index3]);
-
-      // rect gives us some geometry on the screen
-      camadaShader.rect(0, 0, width, height);
-
-      // render the shaderlayer to the screen
-      image(camadaShader, 0, 0, width, height);
 
       // increase all indices by 1, resetting if it goes over layers.length
       // the index runs in a circle 0, 1, 2, ... 29, 30, 0, 1, 2, etc.
@@ -183,8 +147,13 @@ function draw() {
       index2 = (index2 + 1) % layers.length;
       index3 = (index3 + 1) % layers.length;
       break;
+
     default:
   }
+  // tá interferindo no frameDiff, o if não resolveu.
+  shaders[shaderAtiva] === frameDiff
+    ? ""
+    : camadaShader.rect(0, 0, width, height);
 
   // render the camadaShader to the screen
   image(camadaShader, 0, 0, width, height);
