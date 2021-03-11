@@ -1,4 +1,7 @@
-precision lowp float;
+precision mediump float;
+
+#define PI 3.14159265359
+#define TWO_PI 6.28318530718
 
 // grab texcoords from vert shader
 varying vec2 vTexCoord;
@@ -21,7 +24,11 @@ void main() {
   vec4 cam3 = texture2D(tex2, uv);
 
   // lets use one channel from each of the textures
-  vec4 colOut = vec4(cam.r, cam2.g, cam3.b, 1.0);
+  vec4 colChannels = vec4(cam.r, cam2.g, cam3.b, 1.0);
+
+  float avg = (colChannels.r + colChannels.g + colChannels.b) / 3.0;
+
+  vec4 colOut = vec4(avg, avg+0.1, avg, 1.0);
 
   // render the output
   gl_FragColor = colOut;

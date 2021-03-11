@@ -32,6 +32,10 @@ void main() {
   // add the displacement to the texture coordinates
   vec4 pup = texture2D(tex1, uv + disp);
 
+  float cinza = (pup.r + pup.g + pup.b) / 3.0;
+
+  pup = vec4(cinza-0.1, cinza-0.2, cinza-0.5, 1.0);
+
   // output the image
   gl_FragColor = pup;
 }

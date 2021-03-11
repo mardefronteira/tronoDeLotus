@@ -11,7 +11,7 @@ let camadaShader;
 let camadaCopia;
 
 // fundo pro displacement
-let imgFundo;
+let videoFundo;
 
 /* MULTIX */
 // how many past frames should we store at once
@@ -24,6 +24,17 @@ let layers = [];
 let index1 = 0;
 let index2 = numLayers / 3; // 20
 let index3 = (numLayers / 3) * 2; // 40
+
+// Variáveis de carregamento das shaders
+let contadorShaders = 0;
+let shadersCarregadas = false;
+let shaderAtiva = 0;
+
+let medulaOne, sixCaps, tekoLight, tekoRegular;
+
+let musica;
+let tempoMusica = 0;
+let deuPlay = false;
 
 function preload() {
   // load the shader
@@ -38,123 +49,166 @@ function preload() {
 
   shaders = [delay, displacement, videoFeedback, mosaic, frameDiff];
 
-  imgFundo = loadImage("fundo.jpg");
+  medulaOne = loadFont("fontes/MedulaOne-Regular.ttf");
 }
 
+// function carregando() {
+//   console.log("rolou");
+//   contadorShaders++;
+//   if (contadorShaders === shaders.length) {
+//     shadersCarregadas = true;
+//   }
+// }
+
 function setup() {
-  // shaders require WEBGL mode to work
   createCanvas(windowWidth, windowHeight);
   noStroke();
 
-  // initialize the webcam at the window size
+  musica = document.createElement("AUDIO");
+  musica.src = "tronoDeLotus.wav";
+  musica.addEventListener("timeupdate", (e) => {
+    tempoMusica = musica.currentTime;
+    // console.log(tempoMusica);
+  });
+  document.body.appendChild(musica);
+
+  videoFundo = createVideo("fundo.mp4");
+  videoFundo.size(width, height);
+
   cam = createCapture(VIDEO);
   cam.size(windowWidth, windowHeight);
-
-  // hide the html element that createCapture adds to the screen
   cam.hide();
 
-  // this layer will use webgl with our shader
   camadaShader = createGraphics(windowWidth, windowHeight, WEBGL);
-
-  // this layer will just be a copy of what we just did with the shader
   camadaCopia = createGraphics(windowWidth, windowHeight);
 
-  let anterior = createButton("<<");
-  anterior.position(20, 20);
-  anterior.mousePressed(() => {
-    shaderAtiva === 0 ? "" : shaderAtiva--;
-  });
+  // let anterior = createButton("<<");
+  // anterior.position(20, 20);
+  // anterior.mousePressed(() => {
+  //   shaderAtiva === 0 ? "" : shaderAtiva--;
+  // });
 
-  let proxima = createButton(">>");
-  proxima.position(60, 20);
-  proxima.mousePressed(() => {
-    shaderAtiva === shaders.length - 1 ? "" : shaderAtiva++;
-  });
+  // let proxima = createButton(">>");
+  // proxima.position(60, 20);
+  // proxima.mousePressed(() => {
+  //   shaderAtiva === shaders.length - 1 ? "" : shaderAtiva++;
+  // });
 
-  // create a ton of createGraphics layers
+  let proxima = createButton("play");
+  proxima.position(20, 20);
+  proxima.mousePressed(iniciar);
+
+  // graphics para o efeito de delay
   for (let i = 0; i < numLayers; i++) {
     let l = createGraphics(windowWidth, windowHeight);
     layers.push(l);
   }
+
+  background(50, 40, 10);
 }
 
-let shaderAtiva = 0;
+function iniciar() {
+  musica.play();
+  deuPlay = true;
+}
+
+function escolherShader() {
+  if (tempoMusica < 34) {
+    shaderAtiva = 0;
+  } else if (tempoMusica < 84) {
+    shaderAtiva = 1;
+  } else if (tempoMusica < 144) {
+    shaderAtiva = 2;
+  } else if (tempoMusica < 180) {
+    shaderAtiva = 3;
+  } else {
+    shaderAtiva = 4;
+  }
+}
 
 function draw() {
-  // shader() sets the active shader with our shader
-  camadaShader.shader(shaders[shaderAtiva]);
-  shaders[shaderAtiva] !== delay
-    ? shaders[shaderAtiva].setUniform("tex0", cam)
-    : "";
+  if (deuPlay) {
+    escolherShader();
 
-  switch (shaders[shaderAtiva]) {
-    case videoFeedback:
-      // send the copy layer to the shader as a uniform
-      shaders[shaderAtiva].setUniform("tex1", camadaCopia);
+    // shader() sets the active shader with our shader
+    camadaShader.shader(shaders[shaderAtiva]);
+    shaders[shaderAtiva] !== delay
+      ? shaders[shaderAtiva].setUniform("tex0", cam)
+      : "";
 
-      // send mouseIsPressed to the shader as a int (either 0 or 1)
-      shaders[shaderAtiva].setUniform("mouseDown", int(mouseIsPressed));
+    shaders[shaderAtiva] === displacement
+      ? videoFundo.loop()
+      : videoFundo.pause();
 
-      shaders[shaderAtiva].setUniform("time", frameCount * 0.01);
+    switch (shaders[shaderAtiva]) {
+      case videoFeedback:
+        // send the copy layer to the shader as a uniform
+        shaders[shaderAtiva].setUniform("tex1", camadaCopia);
 
-      // draw the camadaShader into the copy layer
-      camadaCopia.image(camadaShader, 0, 0, width, height);
+        // send mouseIsPressed to the shader as a int (either 0 or 1)
+        shaders[shaderAtiva].setUniform("mouseDown", int(mouseIsPressed));
 
-      break;
+        shaders[shaderAtiva].setUniform("time", frameCount * 0.01);
 
-    case frameDiff:
-      // enviar frame anterior à camada de cópia
-      shaders[shaderAtiva].setUniform("tex1", camadaCopia);
+        // draw the camadaShader into the copy layer
+        camadaCopia.image(camadaShader, 0, 0, width, height);
 
-      // also send the mouseX value but convert it to a number between 0 and 1
-      shaders[shaderAtiva].setUniform("mouseX", mouseX / width);
+        break;
 
-      // rect gives us some geometry on the screen
-      camadaShader.rect(0, 0, width, height);
+      case frameDiff:
+        // enviar frame anterior à camada de cópia
+        shaders[shaderAtiva].setUniform("tex1", camadaCopia);
 
-      // draw the cam into the createGraphics layer at the very end of the draw loop
-      // because this happens at the end, if we use it earlier in the loop it will still be referencing an older frame
-      camadaCopia.image(cam, 0, 0, windowWidth, windowHeight);
-      break;
+        // also send the mouseX value but convert it to a number between 0 and 1
+        shaders[shaderAtiva].setUniform("mouseX", mouseX / width);
 
-    case mosaic:
-      // send the resolution to the shader
-      shaders[shaderAtiva].setUniform("resolution", [width, height]);
-      break;
+        // rect gives us some geometry on the screen
+        camadaShader.rect(0, 0, width, height);
 
-    case displacement:
-      // lets just send the cam to our shader as a uniform
-      shaders[shaderAtiva].setUniform("tex1", imgFundo);
+        // draw the cam into the createGraphics layer at the very end of the draw loop
+        // because this happens at the end, if we use it earlier in the loop it will still be referencing an older frame
+        camadaCopia.image(cam, 0, 0, windowWidth, windowHeight);
+        break;
 
-      shaders[shaderAtiva].setUniform("amt", map(mouseX, 0, width, 0, 0.2));
-      break;
+      case mosaic:
+        // send the resolution to the shader
+        shaders[shaderAtiva].setUniform("resolution", [width, height]);
+        break;
 
-    case delay:
-      // draw the camera on the current layer
-      layers[index1].image(cam, 0, 0, width, height);
+      case displacement:
+        // lets just send the cam to our shader as a uniform
+        shaders[shaderAtiva].setUniform("tex1", videoFundo);
 
-      // send the camera and the two other past frames into the camera feed
-      shaders[shaderAtiva].setUniform("tex0", layers[index1]);
-      shaders[shaderAtiva].setUniform("tex1", layers[index2]);
-      shaders[shaderAtiva].setUniform("tex2", layers[index3]);
+        shaders[shaderAtiva].setUniform("amt", map(mouseX, 0, width, 0, 0.2));
+        break;
 
-      // increase all indices by 1, resetting if it goes over layers.length
-      // the index runs in a circle 0, 1, 2, ... 29, 30, 0, 1, 2, etc.
-      // index1
-      // index2 will be somewhere in the past
-      // index3 will be even further into the past
-      index1 = (index1 + 1) % layers.length;
-      index2 = (index2 + 1) % layers.length;
-      index3 = (index3 + 1) % layers.length;
-      break;
+      case delay:
+        // draw the camera on the current layer
+        layers[index1].image(cam, 0, 0, width, height);
 
-    default:
+        // send the camera and the two other past frames into the camera feed
+        shaders[shaderAtiva].setUniform("tex0", layers[index1]);
+        shaders[shaderAtiva].setUniform("tex1", layers[index2]);
+        shaders[shaderAtiva].setUniform("tex2", layers[index3]);
+
+        // increase all indices by 1, resetting if it goes over layers.length
+        // the index runs in a circle 0, 1, 2, ... 29, 30, 0, 1, 2, etc.
+        // index1
+        // index2 will be somewhere in the past
+        // index3 will be even further into the past
+        index1 = (index1 + 1) % layers.length;
+        index2 = (index2 + 1) % layers.length;
+        index3 = (index3 + 1) % layers.length;
+        break;
+
+      default:
+    }
+
+    // criar geometria ao fim, exceto para frameDiff, que precisa que seja antes
+    shaders[shaderAtiva] === frameDiff
+      ? ""
+      : camadaShader.rect(0, 0, width, height);
   }
-  // tá interferindo no frameDiff, o if não resolveu.
-  shaders[shaderAtiva] === frameDiff
-    ? ""
-    : camadaShader.rect(0, 0, width, height);
-
   // render the camadaShader to the screen
   image(camadaShader, 0, 0, width, height);
 }
