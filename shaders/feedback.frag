@@ -10,7 +10,6 @@ varying vec2 vTexCoord;
 uniform sampler2D tex0;
 uniform sampler2D tex1;
 
-uniform float mouseDown;
 uniform float time;
 
 vec3 rgb2hsb(vec3 c){
@@ -54,25 +53,19 @@ void main() {
   // make a copy of the camera
   vec4 tex = cam;
 
-  // if the mouse isn't clicked we'll run the feedback loop
-  if(mouseDown == 0.0){
+  // calculate an angle from the hue
+  // we will use these to offset the texture coordinates just a little bit
+  vec3 hsb = rgb2hsb(cam.rgb);
+  float angleX =  cos(hsb.r* time * PI);
+  float angleY = sin(hsb.r * time);
+  // add those angles to the tex coords and sample the feed back texture
+  tex = texture2D(tex1, feedbackUv + vec2(angleX, angleY)*0.001);
+  // add some camera from the screen
+  tex.rgb += cam.rgb*0.8;
+  // if tex.r > 1.0, invert the texture and swizzle the color channels around
+  tex.rgb = mix(tex.rgb, 1.0 -tex.gbr, step(1.0, tex.r) );
 
-    // calculate an angle from the hue
-    // we will use these to offset the texture coordinates just a little bit
-    vec3 hsb = rgb2hsb(cam.rgb);
-    float angleX =  cos(hsb.r*TWO_PI);
-    float angleY = sin(hsb.r * TWO_PI);
-
-    // add those angles to the tex coords and sample the feed back texture
-    tex = texture2D(tex1, feedbackUv + vec2(angleX, angleY)*0.001);
-
-    // add some camera from the screen
-    tex.rgb += cam.rgb*0.8;
-
-    // if tex.r > 1.0, invert the texture and swizzle the color channels around
-    tex.rgb = mix(tex.rgb, 1.0 -tex.gbr, step(1.0, tex.r) );
-
-  }
+  tex = vec4(tex.r, tex.g - 0.1, tex.b, 1.0);
 
   // render the output
   gl_FragColor = tex;
