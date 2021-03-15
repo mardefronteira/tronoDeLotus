@@ -1,7 +1,8 @@
-// this sketch creates a "multix" or texture delay effect.
-
 // the shader variable
 let camShader;
+
+// the camera variable
+let cam;
 
 function preload() {
   // load the shader
@@ -10,26 +11,42 @@ function preload() {
 
 function setup() {
   // shaders require WEBGL mode to work
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(windowWidth, windowHeight, WEBGL);
   noStroke();
 
-  // this layer will use webgl with our shader
-  shaderLayer = createGraphics(windowWidth, windowHeight, WEBGL);
+  // initialize the webcam at the window size
+  cam = createCapture(VIDEO);
+  cam.size(windowWidth, windowHeight);
+
+  // hide the html element that createCapture adds to the screen
+  cam.hide();
 }
+let tempoInicial = 10000;
+let ampTempo = 0.01;
 
 function draw() {
   // shader() sets the active shader with our shader
-  shaderLayer.shader(camShader);
+  shader(camShader);
 
-  // send the camera and the two other past frames into the camera feed
-  camShader.setUniform("iResolution", [width, height]);
-  camShader.setUniform("iTime", frameCount * 0.01);
+  // lets just send the cam to our shader as a uniform
+  camShader.setUniform("tex0", cam);
+
+  let tempoMusica = (millis() - tempoInicial) / 1000;
+  if (tempoMusica > 10 && tempoMusica < 30) {
+    ampTempo += 0.0001;
+  } else {
+    ampTempo -= 0.0001;
+  }
+
+  // send a slow frameCount to the shader as a time variable
+  camShader.setUniform("time", frameCount * 0.01);
+
+  let amp = map(mouseY, height, 0, 0, 0.1) + ampTempo;
+
+  camShader.setUniform("amplitude", amp);
 
   // rect gives us some geometry on the screen
-  shaderLayer.rect(0, 0, width, height);
-
-  // render the shaderlayer to the screen
-  image(shaderLayer, 0, 0, width, height);
+  rect(0, 0, width, height);
 }
 
 function windowResized() {

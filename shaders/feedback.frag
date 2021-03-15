@@ -63,9 +63,9 @@ void main() {
   // add some camera from the screen
   tex.rgb += cam.rgb*0.8;
   // if tex.r > 1.0, invert the texture and swizzle the color channels around
-  tex.rgb = mix(tex.rgb, 1.0 -tex.gbr, step(1.0, tex.r) );
+  tex.rgb = mix(tex.rgb, 1.0 - tex.gbr, step(1.0, tex.r) );
 
-  tex = vec4(tex.r, tex.g - 0.1, tex.b, 1.0);
+  tex = vec4(tex.r, tex.g - 0.2, tex.b, 1.0);
 
   // render the output
   gl_FragColor = tex;

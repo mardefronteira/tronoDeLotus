@@ -6,7 +6,6 @@ varying vec2 vTexCoord;
 // our textures coming from p5
 uniform sampler2D tex0;
 uniform vec2 resolution;
-//uniform float time;
 
 
 float amt = 0.1; // the amount of displacement, higher is more
