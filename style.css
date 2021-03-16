@@ -17,3 +17,8 @@ h1 {
   font-size: 3em;
   color: rgb(50, 100, 50);
 }
+button {
+  border: 0.5px solid #222;
+  background-color: transparent;
+  cursor: pointer;
+}

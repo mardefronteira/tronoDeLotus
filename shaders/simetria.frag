@@ -23,7 +23,7 @@ void main() {
   tex.rgb -= past.rgb;
 
   // lets multiply it by 2 to boost the signal a little bit
-  tex.rgb *= 1.5;
+  tex.rb *= 1.5;
 
   gl_FragColor = tex;
 }

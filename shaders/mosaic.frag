@@ -9,7 +9,7 @@ uniform vec2 resolution;
 
 
 float amt = 0.1; // the amount of displacement, higher is more
-float squares = 20.0; // the number of squares to render vertically
+float squares = 8.0; // the number of squares to render vertically
 
 void main() {
   float aspect = resolution.x / resolution.y;

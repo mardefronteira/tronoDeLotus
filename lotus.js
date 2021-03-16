@@ -21,7 +21,7 @@ function lotus() {
   camadaCopia.noStroke();
   // fill(random(100,255), random(100),random(150), 50);
   camadaCopia.noFill();
-  camadaCopia.strokeWeight(8);
+  camadaCopia.strokeWeight(15);
   camadaCopia.stroke(random(100, 255), random(100), random(150), 100);
 
   petalaX = dist(mouseX, mouseY, centroLotus.x, centroLotus.y);
@@ -64,6 +64,7 @@ function lotus() {
 }
 
 function mouseClicked() {
+  // console.log("mouse foi clicado");
   centroLotus = {
     x: mouseX,
     y: mouseY,

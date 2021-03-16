@@ -1,7 +1,7 @@
 // the shader variable
 let videoFeedback, frameDiff, mosaic;
 let displacement, delay, sine;
-let simetria;
+let simetria, delayFinal;
 let shaders;
 
 // the camera variable
@@ -43,26 +43,35 @@ let ampSine = 0.01;
 function preload() {
   // load the shader
   videoFeedback = loadShader(
-    "shaders/feedback.vert",
+    "shaders/shaders.vert",
     "shaders/feedback.frag",
     carregando
   );
   frameDiff = loadShader(
-    "shaders/frameDiff.vert",
+    "shaders/shaders.vert",
     "shaders/frameDiff.frag",
     carregando
   );
-  mosaic = loadShader("shaders/mosaic.vert", "shaders/mosaic.frag", carregando);
+  mosaic = loadShader(
+    "shaders/shaders.vert",
+    "shaders/mosaic.frag",
+    carregando
+  );
   displacement = loadShader(
-    "shaders/displacement.vert",
+    "shaders/shaders.vert",
     "shaders/displacement.frag",
     carregando
   );
-  delay = loadShader("shaders/delay.vert", "shaders/delay.frag", carregando);
-  sine = loadShader("shaders/sine.vert", "shaders/sine.frag", carregando);
+  delay = loadShader("shaders/shaders.vert", "shaders/delay.frag", carregando);
+  sine = loadShader("shaders/shaders.vert", "shaders/sine.frag", carregando);
   simetria = loadShader(
-    "shaders/frameDiff.vert",
+    "shaders/shaders.vert",
     "shaders/simetria.frag",
+    carregando
+  );
+  delayFinal = loadShader(
+    "shaders/shaders.vert",
+    "shaders/delayFinal.frag",
     carregando
   );
 
@@ -74,6 +83,7 @@ function preload() {
     frameDiff,
     sine,
     simetria,
+    delayFinal,
   ];
   medulaOne = loadFont("fontes/MedulaOne-Regular.ttf");
 }
@@ -110,7 +120,7 @@ function setup() {
   camadaShader = createGraphics(windowWidth, windowHeight, WEBGL);
   camadaCopia = createGraphics(windowWidth, windowHeight);
 
-  let proxima = createButton("play");
+  let proxima = createButton("⠀");
   proxima.position(20, 20);
   proxima.mousePressed(iniciar);
 
@@ -157,7 +167,7 @@ function escolherShader() {
     } else if (tempoMusica < 202) {
       shaderAtiva = 6;
     } else {
-      shaderAtiva = 0;
+      shaderAtiva = 7;
     }
   }
 }
@@ -165,6 +175,7 @@ function escolherShader() {
 function draw() {
   if (shadersCarregadas) {
     if (!deuPlay) {
+      camadaCopia.clear();
       camadaCopia.noStroke();
       camadaCopia.textFont(medulaOne);
       camadaCopia.textAlign(CENTER, CENTER);
@@ -182,7 +193,7 @@ function draw() {
 
       if (shaders[shaderAtiva] === mosaic) {
         shaders[shaderAtiva].setUniform("tex0", camadaCopia);
-      } else if (shaders[shaderAtiva] !== delay) {
+      } else if (![delay, delayFinal].includes(shaders[shaderAtiva])) {
         shaders[shaderAtiva].setUniform("tex0", cam);
       }
 
@@ -255,6 +266,25 @@ function draw() {
           break;
 
         case delay:
+          // draw the camera on the current layer
+          layers[index1].image(cam, 0, 0, width, height);
+
+          // send the camera and the two other past frames into the camera feed
+          shaders[shaderAtiva].setUniform("tex0", layers[index1]);
+          shaders[shaderAtiva].setUniform("tex1", layers[index2]);
+          shaders[shaderAtiva].setUniform("tex2", layers[index3]);
+
+          // increase all indices by 1, resetting if it goes over layers.length
+          // the index runs in a circle 0, 1, 2, ... 29, 30, 0, 1, 2, etc.
+          // index1
+          // index2 will be somewhere in the past
+          // index3 will be even further into the past
+          index1 = (index1 + 1) % layers.length;
+          index2 = (index2 + 1) % layers.length;
+          index3 = (index3 + 1) % layers.length;
+          break;
+
+        case delayFinal:
           // draw the camera on the current layer
           layers[index1].image(cam, 0, 0, width, height);
 
