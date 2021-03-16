@@ -18,13 +18,13 @@ let videoFundo;
 // how many past frames should we store at once
 // the more you store, the further back in time you can go
 // however it's pretty memory intensive so don't push it too hard
-let numLayers = 30;
+let numLayers = 39;
 
 // an array where we will store the past camera frames
 let layers = [];
 let index1 = 0;
-let index2 = numLayers / 3; // 20
-let index3 = (numLayers / 3) * 2; // 40
+let index2 = numLayers / 3; // 13
+let index3 = (numLayers / 3) * 2; // 26
 
 // Variáveis de carregamento das shaders
 let contadorShaders = 0;
@@ -151,7 +151,7 @@ function reiniciar() {
 
 function escolherShader() {
   if (!musica.paused) {
-    if (tempoMusica < 26) {
+    if (tempoMusica < 25) {
       shaderAtiva = 0;
     } else if (tempoMusica < 52) {
       shaderAtiva = 5;
