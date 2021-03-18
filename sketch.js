@@ -152,21 +152,29 @@ function reiniciar() {
 function escolherShader() {
   if (!musica.paused) {
     if (tempoMusica < 35) {
+      // Delay áudio
       shaderAtiva = 0;
     } else if (tempoMusica < 59) {
+      // Onda
       shaderAtiva = 5;
-    } else if (tempoMusica < 85) {
+    } else if (tempoMusica < 84) {
+      // Lama
       shaderAtiva = 1;
-    } else if (tempoMusica < 118) {
+    } else if (tempoMusica < 119) {
+      // Refrão
       shaderAtiva = 2;
-    } else if (tempoMusica < 135) {
+    } else if (tempoMusica < 136) {
+      // frameDiff
       shaderAtiva = 4;
-    } else if (tempoMusica < 160) {
+    } else if (tempoMusica < 162) {
+      // lótus
       iniciarLotus();
       shaderAtiva = 3;
-    } else if (tempoMusica < 202) {
+    } else if (tempoMusica < 203) {
+      // simetria
       shaderAtiva = 6;
     } else {
+      //--------------------- delay 2
       shaderAtiva = 7;
     }
   }
@@ -261,7 +269,7 @@ function draw() {
 
           shaders[shaderAtiva].setUniform(
             "amt",
-            map(tempoMusica, 52, 84, -1.0, 1.0)
+            map(tempoMusica, 60, 84, -1.0, 1.0)
           );
           break;
 
@@ -306,10 +314,10 @@ function draw() {
         case sine:
           shaders[shaderAtiva].setUniform("time", frameCount * 0.01);
 
-          if (tempoMusica < 48) {
+          if (tempoMusica < 56) {
             ampSine += 0.0001;
           } else {
-            ampSine -= 0.015;
+            ampSine -= 0.017;
           }
 
           let amp = map(mouseY, height, 0, 0, 0.1) + ampSine;
