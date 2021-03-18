@@ -151,17 +151,17 @@ function reiniciar() {
 
 function escolherShader() {
   if (!musica.paused) {
-    if (tempoMusica < 25) {
+    if (tempoMusica < 35) {
       shaderAtiva = 0;
-    } else if (tempoMusica < 52) {
+    } else if (tempoMusica < 59) {
       shaderAtiva = 5;
     } else if (tempoMusica < 85) {
       shaderAtiva = 1;
     } else if (tempoMusica < 118) {
       shaderAtiva = 2;
-    } else if (tempoMusica < 134) {
+    } else if (tempoMusica < 135) {
       shaderAtiva = 4;
-    } else if (tempoMusica < 161) {
+    } else if (tempoMusica < 160) {
       iniciarLotus();
       shaderAtiva = 3;
     } else if (tempoMusica < 202) {
@@ -181,9 +181,9 @@ function draw() {
       camadaCopia.textAlign(CENTER, CENTER);
       camadaCopia.fill(50, 100, 50);
       camadaCopia.textSize(500);
-      camadaCopia.text("Katze", width / 2, height / 2 - 200);
+      camadaCopia.text("Katze", width / 2, height / 2 - height / 4);
       camadaCopia.textSize(200);
-      camadaCopia.text("Trono de Lótus", width / 2, height / 2 + 100);
+      camadaCopia.text("Trono de Lótus", width / 2, height / 2 + height / 8);
       image(camadaCopia, 0, 0, width, height);
     } else {
       escolherShader();

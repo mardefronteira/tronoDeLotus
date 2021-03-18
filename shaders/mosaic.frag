@@ -8,8 +8,8 @@ uniform sampler2D tex0;
 uniform vec2 resolution;
 
 
-float amt = 0.1; // the amount of displacement, higher is more
-float squares = 8.0; // the number of squares to render vertically
+float amt = 0.05; // the amount of displacement, higher is more
+float squares = 6.0; // the number of squares to render vertically
 
 void main() {
   float aspect = resolution.x / resolution.y;

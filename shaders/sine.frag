@@ -30,7 +30,7 @@ void main() {
   // add the distortion to our texture coordinates
   vec4 tex = texture2D(tex0, uv + distort);
 
-  tex = vec4(step(0.5,tex.r), tex.g , tex.b, 1.0);
+  tex = vec4(tex.r, tex.g, tex.r, 1.0);
 
   gl_FragColor = tex;
 }
