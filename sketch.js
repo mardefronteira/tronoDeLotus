@@ -30,9 +30,8 @@ let index3 = (numLayers / 3) * 2; // 26
 let contadorShaders = 0;
 let shadersCarregadas = false;
 let shaderAtiva = 0;
-let shaderAnterior;
 
-let medulaOne, sixCaps, tekoLight, tekoRegular;
+let medulaOne;
 
 let musica;
 let tempoMusica = 0;
@@ -135,12 +134,12 @@ function setup() {
 }
 
 function iniciar() {
-  if (!deuPlay) {
+  if (musica.paused) {
     musica.play();
     deuPlay = true;
   } else {
     musica.pause();
-    deuPlay = false;
+    // deuPlay = false;
   }
 }
 
@@ -157,7 +156,7 @@ function escolherShader() {
     } else if (tempoMusica < 58) {
       // Onda
       shaderAtiva = 5;
-    } else if (tempoMusica < 86) {
+    } else if (tempoMusica < 85.5) {
       // Lama
       shaderAtiva = 1;
     } else if (tempoMusica < 119) {
@@ -170,7 +169,7 @@ function escolherShader() {
       // lótus
       iniciarLotus();
       shaderAtiva = 3;
-    } else if (tempoMusica < 203) {
+    } else if (tempoMusica < 202.5) {
       // simetria
       shaderAtiva = 6;
     } else {
@@ -269,7 +268,7 @@ function draw() {
 
           shaders[shaderAtiva].setUniform(
             "amt",
-            map(tempoMusica, 60, 84, -1.0, 1.0)
+            map(tempoMusica, 60, 85.5, -1.0, 1.0)
           );
           break;
 
