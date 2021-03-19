@@ -154,19 +154,19 @@ function escolherShader() {
     if (tempoMusica < 35) {
       // Delay áudio
       shaderAtiva = 0;
-    } else if (tempoMusica < 59) {
+    } else if (tempoMusica < 58) {
       // Onda
       shaderAtiva = 5;
-    } else if (tempoMusica < 84) {
+    } else if (tempoMusica < 86) {
       // Lama
       shaderAtiva = 1;
     } else if (tempoMusica < 119) {
       // Refrão
       shaderAtiva = 2;
-    } else if (tempoMusica < 136) {
+    } else if (tempoMusica < 135) {
       // frameDiff
       shaderAtiva = 4;
-    } else if (tempoMusica < 162) {
+    } else if (tempoMusica < 160) {
       // lótus
       iniciarLotus();
       shaderAtiva = 3;
