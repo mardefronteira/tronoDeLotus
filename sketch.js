@@ -95,6 +95,9 @@ function carregando() {
 }
 
 function setup() {
+  const canvasSize = {
+    w: windowWidth / 2,
+  };
   createCanvas(windowWidth, windowHeight);
   noStroke();
 
@@ -113,10 +116,10 @@ function setup() {
   videoFundo.hide();
 
   cam = createCapture(VIDEO);
-  cam.size(windowWidth, windowHeight);
+  cam.size(windowWidth / 2, windowHeight / 2);
   cam.hide();
 
-  camadaShader = createGraphics(windowWidth, windowHeight, WEBGL);
+  camadaShader = createGraphics(windowWidth / 2, windowHeight / 2, WEBGL);
   camadaCopia = createGraphics(windowWidth, windowHeight);
 
   let proxima = createButton("⠀");
@@ -188,10 +191,18 @@ function draw() {
       camadaCopia.textAlign(CENTER, CENTER);
       camadaCopia.fill(50, 100, 50);
       camadaCopia.textSize(500);
-      camadaCopia.text("Katze", width / 2, height / 2 - height / 4);
+      camadaCopia.text(
+        "Katze",
+        camadaCopia.width / 2,
+        camadaCopia.height / 2 - camadaCopia.height / 4
+      );
       camadaCopia.textSize(200);
-      camadaCopia.text("Trono de Lótus", width / 2, height / 2 + height / 8);
-      image(camadaCopia, 0, 0, width, height);
+      camadaCopia.text(
+        "Trono de Lótus",
+        camadaCopia.width / 2,
+        camadaCopia.height / 2 + camadaCopia.height / 8
+      );
+      image(camadaCopia, 0, 0, camadaCopia.width, camadaCopia.height);
     } else {
       escolherShader();
 
