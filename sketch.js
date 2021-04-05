@@ -93,12 +93,14 @@ function carregando() {
     shadersCarregadas = true;
   }
 }
-
+let telaClipe;
 function setup() {
   const canvasSize = {
     w: windowWidth / 2,
   };
-  createCanvas(windowWidth, windowHeight);
+
+  telaClipe = createCanvas(windowWidth, windowHeight);
+  telaClipe.hide();
   noStroke();
 
   musica = document.createElement("AUDIO");
@@ -115,16 +117,12 @@ function setup() {
   videoFundo.size(width, height);
   videoFundo.hide();
 
-  cam = createCapture(VIDEO);
-  cam.size(windowWidth / 2, windowHeight / 2);
-  cam.hide();
-
   camadaShader = createGraphics(windowWidth / 2, windowHeight / 2, WEBGL);
   camadaCopia = createGraphics(windowWidth, windowHeight);
 
-  let proxima = createButton("⠀");
-  proxima.position(20, 20);
-  proxima.mousePressed(iniciar);
+  // let proxima = createButton("⠀");
+  // proxima.position(20, 20);
+  // proxima.mousePressed(iniciar);
 
   // graphics para o efeito de delay
   for (let i = 0; i < numLayers; i++) {
@@ -133,13 +131,19 @@ function setup() {
   }
 
   angleMode(DEGREES);
-  background(40, 30, 0);
 }
 
-function iniciar() {
+function pedirCamera() {
+  cam = createCapture(VIDEO);
+  cam.size(windowWidth / 2, windowHeight / 2);
+  cam.hide();
+  telaClipe.show();
+  // deuPlay = true;
+}
+
+function playPause() {
   if (musica.paused) {
     musica.play();
-    deuPlay = true;
   } else {
     musica.pause();
     // deuPlay = false;
@@ -185,24 +189,10 @@ function escolherShader() {
 function draw() {
   if (shadersCarregadas) {
     if (!deuPlay) {
-      camadaCopia.clear();
-      camadaCopia.noStroke();
-      camadaCopia.textFont(medulaOne);
-      camadaCopia.textAlign(CENTER, CENTER);
-      camadaCopia.fill(50, 100, 50);
-      camadaCopia.textSize(500);
-      camadaCopia.text(
-        "Katze",
-        camadaCopia.width / 2,
-        camadaCopia.height / 2 - camadaCopia.height / 4
-      );
-      camadaCopia.textSize(200);
-      camadaCopia.text(
-        "Trono de Lótus",
-        camadaCopia.width / 2,
-        camadaCopia.height / 2 + camadaCopia.height / 8
-      );
-      image(camadaCopia, 0, 0, camadaCopia.width, camadaCopia.height);
+      background(0);
+      noFill();
+      stroke(255);
+      ellipse(width / 2, height / 2, mouseX, mouseY);
     } else {
       escolherShader();
 

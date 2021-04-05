@@ -14,13 +14,227 @@ canvas {
   height: 100vh;
   width: 100vw;
 }
-h1 {
-  font-family: "Medula One", cursive;
-  font-size: 3em;
-  color: rgb(50, 100, 50);
+body {
+  /* background: #111; */
+  background: rgb(0, 0, 0);
+  background: linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 1) 25%,
+    rgba(30, 30, 30, 1) 100%
+  );
+  font-size: 16px;
+  height: 100vh;
+  overflow: hidden;
 }
-button {
-  border: 0.5px solid #222;
-  background-color: transparent;
+
+#conteiner-circulo {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+#titulo {
+  font-family: "Medula One", serif;
+  font-weight: normal;
+  color: #ccc;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  line-height: 0.8;
+  position: absolute;
+  top: 3vh;
+  left: 3vw;
+  z-index: 10;
+}
+
+#titulo-katze {
+  font-size: 6em;
+}
+
+#titulo-trono {
+  font-size: 2.3em;
+}
+
+#links {
+  position: absolute;
+  bottom: 5vh;
+  right: 3vw;
+  width: auto;
+  height: auto;
+}
+
+.link-inicial {
+  height: 5vh;
+  padding-right: 0.5vw;
+}
+
+#creditos-inicial {
+  height: 6vh;
+  padding-left: 3vw;
+}
+
+.centralizar {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#circulo {
+  height: 90vh;
+}
+
+#foto-capa {
+  transition: 0.5s;
+}
+
+#botao-play {
+  transition: 0.5s;
+  opacity: 0;
+}
+
+#play-inicial {
   cursor: pointer;
+}
+
+#play-inicial:hover > #foto-capa {
+  opacity: 0.5;
+}
+
+#play-inicial:hover > #botao-play {
+  opacity: 1;
+}
+
+a {
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+li {
+  padding: 0.2em;
+}
+
+#texto-creditos {
+  color: #fff;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 20vw;
+  height: auto;
+  margin: 3vh 3vw;
+  font-size: 0.9em;
+  text-align: right;
+  line-height: 1.5;
+  font-family: Colibri, sans-serif;
+}
+
+.simbolo-inicial,
+.link-inicial {
+  transition: 0.2s;
+}
+
+.simbolo-inicial:hover,
+.link-inicial:hover {
+  opacity: 0.5;
+}
+
+.transparente {
+  fill: transparent;
+}
+
+.escondida {
+  display: none;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.branco {
+  fill: #fff;
+}
+
+.verde {
+  fill: #2db889;
+}
+
+#popup {
+  color: #fff;
+  font-family: Colibri, sans-serif;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 5vh 5vw;
+  line-height: 1.5;
+  text-align: center;
+  box-shadow: 5px 5px 5px #111;
+}
+
+.simbolo-menu,
+.play-pause {
+  height: 80%;
+  padding: 10% 1vw;
+  width: auto;
+}
+
+.titulo-popup {
+  font-family: "Medula One", serif;
+  font-size: 2.5em;
+}
+
+#comecar-inicial {
+  background: none;
+  border: 1px solid #fff;
+  font-size: 1.5em;
+  color: #fff;
+  padding: 1vh 1vw;
+  margin-top: 2vh;
+}
+
+#comecar-inicial:hover,
+#comecar-inicial:focus {
+  opacity: 0.7;
+}
+
+#play-pause {
+  width: 2vh;
+  height: 100%;
+}
+
+#menu-escondido {
+  height: 100%;
+  width: 0;
+  transition: 1s;
+  overflow: hidden;
+}
+
+#menu {
+  background: #fff;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 5vh;
+  width: auto;
+}
+
+#menu:hover > #menu-escondido {
+  width: auto;
+}
+
+.flex {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -moz-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -moz-box-direction: normal;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  flex: 1;
 }
