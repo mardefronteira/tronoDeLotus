@@ -1,5 +1,7 @@
 function iniciar() {
   const botaoPlay = document.querySelector("#play-inicial");
+  const botaoSair = document.querySelector("#sair-menu");
+  const playPause = document.querySelector("#play-pause");
   const botaoComecar = document.querySelector("#comecar-inicial");
   const botaoCreditos = Array.from(
     document.querySelectorAll(".botao-creditos")
@@ -7,7 +9,10 @@ function iniciar() {
   const botaoYoutube = document.querySelector("#youtube-inicial");
   const botaoInsta = document.querySelector("#instagram-inicial");
   const botaoSpotify = document.querySelector("#spotify-inicial");
-  const simbolos = Array.from(document.querySelectorAll(".simbolo-inicial"));
+  const simbolosInicial = Array.from(
+    document.querySelectorAll(".simbolo-inicial")
+  );
+  const simbolosMenu = Array.from(document.querySelectorAll(".simbolo-menu"));
 
   const tempoSimbolos = {
     delay1: 0,
@@ -20,7 +25,7 @@ function iniciar() {
     delay2: 205,
   };
 
-  for (let simbolo of simbolos) {
+  for (let simbolo of simbolosInicial) {
     const tempo = tempoSimbolos[simbolo.id.split("-")[0]];
     simbolo.addEventListener("click", () => {
       musica.currentTime = tempo;
@@ -29,11 +34,24 @@ function iniciar() {
     });
   }
 
+  for (let simbolo of simbolosMenu) {
+    const tempo = tempoSimbolos[simbolo.id.split("-")[0]];
+    simbolo.addEventListener("click", () => {
+      musica.currentTime = tempo;
+      ampSine = 0.01;
+      musica.pause();
+      document.querySelector("#play-menu").classList.remove("escondida");
+      document.querySelector("#pause-menu").classList.add("escondida");
+    });
+  }
+
   botaoPlay.addEventListener("click", () => {
     musica.currentTime = 0;
     clipeTodo = true;
     mostrarPopup();
   });
+
+  botaoSair.addEventListener("click", fecharClipe);
 
   botaoComecar.addEventListener("click", () => {
     pedirCamera();
@@ -51,12 +69,26 @@ function iniciar() {
       }
     });
     botao.addEventListener("click", () => {
-      creditoVisivel = !creditoVisivel;
+      creditoVisivel = creditos.classList.contains("escondida") ? false : true;
       creditoVisivel
-        ? creditos.classList.remove("escondida")
-        : creditos.classList.add("escondida");
+        ? creditos.classList.add("escondida")
+        : creditos.classList.remove("escondida");
+      creditoVisivel = !creditoVisivel;
     });
   }
+
+  playPause.addEventListener("click", () => {
+    if (musica.paused) {
+      musica.play();
+      document.querySelector("#play-menu").classList.add("escondida");
+      document.querySelector("#pause-menu").classList.remove("escondida");
+    } else {
+      musica.pause();
+      document.querySelector("#play-menu").classList.remove("escondida");
+      document.querySelector("#pause-menu").classList.add("escondida");
+      // deuPlay = false;
+    }
+  });
 }
 
 let creditoVisivel = false;
@@ -80,14 +112,19 @@ function checarCamera() {
       document.querySelector("#popup").classList.add("escondida");
       document.querySelector("#creditos").classList.add("escondida");
       document.querySelector("#inicial").classList.add("escondida");
+
       if (clipeTodo) {
         musica.play();
+        document.querySelector("#play-menu").classList.add("escondida");
+        document.querySelector("#pause-menu").classList.remove("escondida");
+        clipeTodo = false;
       }
       deuPlay = true;
       telaClipe.show();
+      document.querySelector("#menu").classList.remove("escondida");
     },
     () => {
-      setTimeOut(checarCamera, 1000);
+      window.setTimeOut(checarCamera, 1000);
     }
   );
 }

@@ -109,7 +109,12 @@ function setup() {
   musica.addEventListener("timeupdate", (e) => {
     tempoMusica = musica.currentTime;
   });
-  musica.addEventListener("ended", reiniciar);
+  musica.addEventListener("ended", () => {
+    fecharClipe();
+    document.querySelector("#creditos").classList.remove("escondida");
+    // creditoVisivel =
+  });
+
   document.body.appendChild(musica);
   musica.load();
 
@@ -144,8 +149,12 @@ function pedirCamera() {
 function playPause() {
   if (musica.paused) {
     musica.play();
+    document.querySelector("#play-menu").classList.add("escondida");
+    document.querySelector("#pause-menu").classList.remove("escondida");
   } else {
     musica.pause();
+    document.querySelector("#play-menu").classList.remove("escondida");
+    document.querySelector("#pause-menu").classList.add("escondida");
     // deuPlay = false;
   }
 }
@@ -155,35 +164,43 @@ function reiniciar() {
   ampSine = 0.01;
 }
 
+function fecharClipe() {
+  document.querySelector("#inicial").classList.remove("escondida");
+  document.querySelector("#menu").classList.add("escondida");
+  musica.paused ? "" : musica.pause();
+  reiniciar();
+  telaClipe.hide();
+}
+
 function escolherShader() {
-  if (!musica.paused) {
-    if (tempoMusica < 35) {
-      // Delay áudio
-      shaderAtiva = 0;
-    } else if (tempoMusica < 58) {
-      // Onda
-      shaderAtiva = 5;
-    } else if (tempoMusica < 85.5) {
-      // Lama
-      shaderAtiva = 1;
-    } else if (tempoMusica < 119) {
-      // Refrão
-      shaderAtiva = 2;
-    } else if (tempoMusica < 135) {
-      // frameDiff
-      shaderAtiva = 4;
-    } else if (tempoMusica < 160) {
-      // lótus
-      iniciarLotus();
-      shaderAtiva = 3;
-    } else if (tempoMusica < 202.5) {
-      // simetria
-      shaderAtiva = 6;
-    } else {
-      //--------------------- delay 2
-      shaderAtiva = 7;
-    }
+  // if (!musica.paused) {
+  if (tempoMusica < 35) {
+    // Delay áudio
+    shaderAtiva = 0;
+  } else if (tempoMusica < 58) {
+    // Onda
+    shaderAtiva = 5;
+  } else if (tempoMusica < 85.5) {
+    // Lama
+    shaderAtiva = 1;
+  } else if (tempoMusica < 119) {
+    // Refrão
+    shaderAtiva = 2;
+  } else if (tempoMusica < 135) {
+    // frameDiff
+    shaderAtiva = 4;
+  } else if (tempoMusica < 160) {
+    // lótus
+    iniciarLotus();
+    shaderAtiva = 3;
+  } else if (tempoMusica < 202.5) {
+    // simetria
+    shaderAtiva = 6;
+  } else {
+    //--------------------- delay 2
+    shaderAtiva = 7;
   }
+  // }
 }
 
 function draw() {

@@ -13,7 +13,9 @@ canvas {
   left: 0;
   height: 100vh;
   width: 100vw;
+  z-index: 0;
 }
+
 body {
   /* background: #111; */
   background: rgb(0, 0, 0);
@@ -132,6 +134,7 @@ li {
   text-align: right;
   line-height: 1.5;
   font-family: Colibri, sans-serif;
+  z-index: 15;
 }
 
 .simbolo-inicial,
@@ -162,28 +165,6 @@ li {
   fill: #2db889;
 }
 
-#popup {
-  color: #fff;
-  font-family: Colibri, sans-serif;
-  background: rgba(0, 0, 0, 0.8);
-  padding: 5vh 5vw;
-  line-height: 1.5;
-  text-align: center;
-  box-shadow: 5px 5px 5px #111;
-}
-
-.simbolo-menu,
-.play-pause {
-  height: 80%;
-  padding: 10% 1vw;
-  width: auto;
-}
-
-.titulo-popup {
-  font-family: "Medula One", serif;
-  font-size: 2.5em;
-}
-
 #comecar-inicial {
   background: none;
   border: 1px solid #fff;
@@ -198,29 +179,53 @@ li {
   opacity: 0.7;
 }
 
+#popup {
+  color: #fff;
+  font-family: Colibri, sans-serif;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 5vh 5vw;
+  line-height: 1.5;
+  text-align: center;
+  box-shadow: 5px 5px 5px #111;
+}
+
+.titulo-popup {
+  font-family: "Medula One", serif;
+  font-size: 2.5em;
+}
+
+.simbolo-menu,
+.play-pause,
+#creditos-menu {
+  height: 3vh;
+  padding: 1vh 1vw;
+  max-width: 3vw;
+  cursor: pointer;
+}
+
 #play-pause {
-  width: 2vh;
-  height: 100%;
+  background: rgba(150, 150, 150, 0.5);
 }
 
 #menu-escondido {
-  height: 100%;
-  width: 0;
-  transition: 1s;
+  background: rgba(150, 150, 150, 0.5);
+  display: block;
   overflow: hidden;
+  width: 0;
+  transition: 0.5s ease;
 }
 
 #menu {
-  background: #fff;
   position: absolute;
   top: 0;
   left: 0;
   height: 5vh;
-  width: auto;
+  background: none;
+  z-index: 15;
 }
 
 #menu:hover > #menu-escondido {
-  width: auto;
+  width: 35vw;
 }
 
 .flex {

@@ -17,9 +17,9 @@
     <!-- <script src="p5/addons/p5.sound.js"></script> -->
 
     <!-- CLIPE -->
+    <script src="sketch.js"></script>
     <script src="nav.js"></script>
     <script src="lotus.js"></script>
-    <script src="sketch.js"></script>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body onload="iniciar()">
@@ -518,20 +518,63 @@
       </p>
       <button id="comecar-inicial" type="button" name="começar">começar</button>
     </div>
-    <nav id="menu">
+    <nav id="menu" class="flex escondida">
       <div id="play-pause">
-        <img src="midia/play.svg" class="play-pause" alt="play" />
-        <img src="midia/pause.svg" class="play-pause escondida" alt="pause" />
+        <img
+          id="play-menu"
+          src="midia/play.svg"
+          class="play-pause"
+          alt="play"
+        />
+        <img
+          id="pause-menu"
+          src="midia/pause.svg"
+          class="play-pause escondida"
+          alt="pause"
+        />
       </div>
       <div id="menu-escondido" class="flex">
-        <img src="midia/delay1.svg" class="simbolo-menu" />
-        <img src="midia/onda.svg" class="simbolo-menu" />
-        <img src="midia/delay2.svg" class="simbolo-menu" />
-        <img src="midia/lama.svg" class="simbolo-menu" />
-        <img src="midia/lotus.svg" class="simbolo-menu" />
-        <img src="midia/simetria.svg" class="simbolo-menu" />
-        <img src="midia/feedback.svg" class="simbolo-menu" />
-        <img src="midia/preto.svg" class="simbolo-menu" />
+        <img
+          id="delay1-menu"
+          class="delay1 simbolo-menu"
+          src="midia/simbolos/delay1.svg"
+        />
+        <img
+          id="onda-menu"
+          class="onda simbolo-menu"
+          src="midia/simbolos/onda.svg"
+        />
+        <img
+          id="lama-menu"
+          class="lama simbolo-menu"
+          src="midia/simbolos/lama.svg"
+        />
+        <img
+          id="feedback-menu"
+          class="feedback simbolo-menu"
+          src="midia/simbolos/feedback.svg"
+        />
+        <img
+          id="preto-menu"
+          class="preto simbolo-menu"
+          src="midia/simbolos/preto.svg"
+        />
+        <img
+          id="lotus-menu"
+          class="lotus simbolo-menu"
+          src="midia/simbolos/lotus.svg"
+        />
+        <img
+          id="simetria-menu"
+          class="simetria simbolo-menu"
+          src="midia/simbolos/simetria.svg"
+        />
+        <img
+          id="delay2-menu"
+          class="delay2 simbolo-menu"
+          src="midia/simbolos/delay2.svg"
+        />
+        <img id="sair-menu" class="play-pause" src="midia/icones/sair.svg" />
       </div>
     </nav>
   </body>

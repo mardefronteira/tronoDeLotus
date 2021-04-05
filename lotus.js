@@ -1,5 +1,6 @@
 function iniciarLotus() {
   camadaCopia.clear();
+  camadaShader.clear();
   centroLotus = {
     x: width / 2,
     y: height / 2,
