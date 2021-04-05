@@ -112,7 +112,7 @@ function setup() {
   musica.addEventListener("ended", () => {
     fecharClipe();
     document.querySelector("#creditos").classList.remove("escondida");
-    // creditoVisivel =
+    creditoVisivel = true;
   });
 
   document.body.appendChild(musica);

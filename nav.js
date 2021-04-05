@@ -56,6 +56,8 @@ function iniciar() {
   botaoComecar.addEventListener("click", () => {
     pedirCamera();
     checarCamera();
+    document.querySelector("#popup").classList.add("escondida");
+    document.querySelector("#creditos").classList.add("escondida");
   });
 
   const creditos = document.querySelector("#creditos");
@@ -69,7 +71,6 @@ function iniciar() {
       }
     });
     botao.addEventListener("click", () => {
-      creditoVisivel = creditos.classList.contains("escondida") ? false : true;
       creditoVisivel
         ? creditos.classList.add("escondida")
         : creditos.classList.remove("escondida");
@@ -109,8 +110,6 @@ function checarCamera() {
   navigator.getMedia(
     { video: true },
     () => {
-      document.querySelector("#popup").classList.add("escondida");
-      document.querySelector("#creditos").classList.add("escondida");
       document.querySelector("#inicial").classList.add("escondida");
 
       if (clipeTodo) {
@@ -119,6 +118,7 @@ function checarCamera() {
         document.querySelector("#pause-menu").classList.remove("escondida");
         clipeTodo = false;
       }
+
       deuPlay = true;
       telaClipe.show();
       document.querySelector("#menu").classList.remove("escondida");
