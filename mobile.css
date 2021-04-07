@@ -1,0 +1,102 @@
+@media screen and (max-width: 800px) {
+  body {
+    font-size: 10px;
+  }
+
+  canvas {
+    display: none;
+  }
+
+  #links {
+    bottom: 2vh;
+    right: 3vw;
+  }
+
+  #circulo {
+    width: 90vw;
+    height: auto;
+  }
+
+  #titulo {
+    top: 1vh;
+    left: 3vw;
+  }
+
+  #titulo-katze {
+    font-size: 5em;
+  }
+
+  #titulo-trono {
+    font-size: 2em;
+  }
+
+  .link-inicial {
+    height: 4vh;
+    padding-right: 2vw;
+  }
+
+  #creditos-inicial {
+    height: 5vh;
+    padding-left: 3vw;
+  }
+
+  #texto-creditos {
+    background: rgba(0, 0, 0, 0.5);
+    width: 45vw;
+    font-size: 1em;
+    padding: 1vh 1vw;
+  }
+
+  .titulo-popup {
+    font-size: 2em;
+  }
+
+  .botao-popup {
+    font-size: 1.3em;
+    padding: 0.5vh 2vw;
+  }
+
+  .popup {
+    padding: 2vh 5vw;
+    line-height: 1.5;
+    width: 70%;
+  }
+  /*---------*/
+
+  .simbolo-menu,
+  .play-pause,
+  #creditos-menu {
+    height: 3vh;
+    padding: 1vh 1vw;
+    margin: 0;
+    max-width: 3vw;
+    cursor: pointer;
+  }
+
+  #play-pause {
+    background: rgba(150, 150, 150, 0.5);
+  }
+
+  #menu-escondido {
+    background: rgba(150, 150, 150, 0.5);
+    display: block;
+    overflow: hidden;
+    width: 0;
+    height: 0;
+    transition: 0.5s ease;
+  }
+
+  #menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 5vh;
+    background: none;
+    z-index: 15;
+  }
+
+  #menu:hover > #menu-escondido {
+    width: 37vw;
+    height: auto;
+  }
+}

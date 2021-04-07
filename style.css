@@ -159,7 +159,7 @@ li {
   fill: #2db889;
 }
 
-#comecar-inicial {
+.botao-popup {
   background: none;
   border: 1px solid #fff;
   font-size: 1.5em;
@@ -173,7 +173,7 @@ li {
   opacity: 0.7;
 }
 
-#popup {
+.popup {
   color: #fff;
   font-family: Colibri, sans-serif;
   background: rgba(0, 0, 0, 0.8);
@@ -186,6 +186,7 @@ li {
 .titulo-popup {
   font-family: "Medula One", serif;
   font-size: 2.5em;
+  line-height: 0;
 }
 
 .simbolo-menu,

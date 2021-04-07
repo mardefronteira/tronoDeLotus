@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <title>Trono de Lótus</title>
     <meta name="description" content="▲ Clipe interativo da Katze ▲" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- FONTES -->
     <link rel="preconnect" href="https://fonts.gstatic.com" />
@@ -21,6 +22,7 @@
     <script src="nav.js"></script>
     <script src="lotus.js"></script>
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="mobile.css" />
   </head>
   <body onload="iniciar()">
     <div id="inicial">
@@ -503,7 +505,7 @@
         />
       </footer>
     </div>
-    <div id="popup" class="centralizar escondida">
+    <div id="popup" class="popup centralizar escondida">
       <h2 class="titulo-popup">Atenção:</h2>
       <p>
         O clipe interativo necessita do acesso à câmera, e portanto ao clicar no
@@ -516,7 +518,24 @@
         afetar espectadores suscetíveis a epilepsia e outros distúrbios causados
         pela sensibilidade à luz.
       </p>
-      <button id="comecar-inicial" type="button" name="começar">começar</button>
+      <button
+        id="comecar-inicial"
+        class="botao-popup"
+        type="button"
+        name="começar"
+      >
+        começar
+      </button>
+    </div>
+    <div id="popup-mobile" class="popup centralizar escondida">
+      <h2 class="titulo-popup">Tente outro dispositivo</h2>
+      <p>
+        Este ambiente não suporta dispositivos móveis. Acesse por um computador
+        para experienciar o clipe.
+      </p>
+      <button id="ok-inicial" class="botao-popup" type="button" name="ok">
+        ok
+      </button>
     </div>
     <nav id="menu" class="flex escondida">
       <div id="play-pause">
