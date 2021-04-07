@@ -1,26 +1,21 @@
-// the shader variable
+// shaders
 let videoFeedback, frameDiff, mosaic;
 let displacement, delay, sine;
 let simetria, delayFinal;
 let shaders;
 
-// the camera variable
 let cam;
 
-// we will need at least two layers for this effect
 let camadaShader;
 let camadaCopia;
 
 // fundo pro displacement
 let videoFundo;
 
-/* MULTIX */
-// how many past frames should we store at once
-// the more you store, the further back in time you can go
-// however it's pretty memory intensive so don't push it too hard
+// número de frames a seres guardados para o delay (39 frames / 3 camadas)
 let numLayers = 39;
 
-// an array where we will store the past camera frames
+// array para guardar os frames de fato
 let layers = [];
 let index1 = 0;
 let index2 = numLayers / 3; // 13
@@ -31,17 +26,23 @@ let contadorShaders = 0;
 let shadersCarregadas = false;
 let shaderAtiva = 0;
 
+// fonte
 let medulaOne;
 
+// variáveis da música
 let musica;
 let tempoMusica = 0;
 let deuPlay = false;
 
+// amplitude da onda
 let ampSine = 0.01;
+
+// variável para guardar a canvas em si.
+let telaClipe;
 
 function preload() {
   if (!mobile) {
-    // load the shader
+    // carregar shaders
     videoFeedback = loadShader(
       "shaders/shaders.vert",
       "shaders/feedback.frag",
@@ -79,6 +80,7 @@ function preload() {
       carregando
     );
 
+    // popular array de shaders
     shaders = [
       delay,
       displacement,
@@ -89,6 +91,8 @@ function preload() {
       simetria,
       delayFinal,
     ];
+
+    // carregar fonte
     medulaOne = loadFont("fontes/MedulaOne-Regular.ttf");
   }
 }
@@ -99,13 +103,8 @@ function carregando() {
     shadersCarregadas = true;
   }
 }
-let telaClipe;
 function setup() {
   if (!mobile) {
-    const canvasSize = {
-      w: windowWidth / 2,
-    };
-
     telaClipe = createCanvas(windowWidth, windowHeight);
     telaClipe.hide();
     noStroke();
@@ -132,10 +131,6 @@ function setup() {
     camadaShader = createGraphics(windowWidth / 2, windowHeight / 2, WEBGL);
     camadaCopia = createGraphics(windowWidth, windowHeight);
 
-    // let proxima = createButton("⠀");
-    // proxima.position(20, 20);
-    // proxima.mousePressed(iniciar);
-
     // graphics para o efeito de delay
     for (let i = 0; i < numLayers; i++) {
       let l = createGraphics(windowWidth, windowHeight);
@@ -151,7 +146,6 @@ function pedirCamera() {
   cam.size(windowWidth / 2, windowHeight / 2);
   cam.hide();
   telaClipe.show();
-  // deuPlay = true;
 }
 
 function playPause() {
@@ -163,7 +157,6 @@ function playPause() {
     musica.pause();
     document.querySelector("#play-menu").classList.remove("escondida");
     document.querySelector("#pause-menu").classList.add("escondida");
-    // deuPlay = false;
   }
 }
 

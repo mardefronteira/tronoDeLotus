@@ -52,6 +52,7 @@ function iniciar() {
         document.querySelectorAll(".simbolo-menu")
       );
 
+      // tempos da música correspondente aos efeitos em segundos
       const tempoSimbolos = {
         delay1: 0,
         onda: 37,
@@ -63,6 +64,7 @@ function iniciar() {
         delay2: 205,
       };
 
+      // configuração dos símbolos da página inicial
       for (let simbolo of simbolosInicial) {
         const tempo = tempoSimbolos[simbolo.id.split("-")[0]];
         simbolo.addEventListener("click", () => {
@@ -72,6 +74,22 @@ function iniciar() {
         });
       }
 
+      // configuração da foto + botão play da página inicial
+      botaoPlay.addEventListener("click", () => {
+        musica.currentTime = 0;
+        clipeTodo = true;
+        mostrarPopup();
+      });
+
+      // configuração do botão do pop up
+      botaoComecar.addEventListener("click", () => {
+        pedirCamera();
+        checarCamera();
+        document.querySelector("#popup").classList.add("escondida");
+        document.querySelector("#creditos").classList.add("escondida");
+      });
+
+      // configuração do menu de bordo
       for (let simbolo of simbolosMenu) {
         const tempo = tempoSimbolos[simbolo.id.split("-")[0]];
         simbolo.addEventListener("click", () => {
@@ -83,20 +101,7 @@ function iniciar() {
         });
       }
 
-      botaoPlay.addEventListener("click", () => {
-        musica.currentTime = 0;
-        clipeTodo = true;
-        mostrarPopup();
-      });
-
       botaoSair.addEventListener("click", fecharClipe);
-
-      botaoComecar.addEventListener("click", () => {
-        pedirCamera();
-        checarCamera();
-        document.querySelector("#popup").classList.add("escondida");
-        document.querySelector("#creditos").classList.add("escondida");
-      });
 
       playPause.addEventListener("click", () => {
         if (musica.paused) {
@@ -107,7 +112,6 @@ function iniciar() {
           musica.pause();
           document.querySelector("#play-menu").classList.remove("escondida");
           document.querySelector("#pause-menu").classList.add("escondida");
-          // deuPlay = false;
         }
       });
     } else {
@@ -134,12 +138,15 @@ function mostrarPopup() {
 }
 
 function checarCamera() {
+  // procurar autorização da câmera
   navigator.getMedia =
     navigator.getUserMedia || // use the proper vendor prefix
     navigator.webkitGetUserMedia ||
     navigator.mozGetUserMedia ||
     navigator.msGetUserMedia;
 
+  // ao encontrar, mostrar canvas e iniciar música
+  // caso contrário, esperar 1 segundo e tentar de novo
   navigator.getMedia(
     { video: true },
     () => {
